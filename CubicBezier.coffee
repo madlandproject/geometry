@@ -125,7 +125,7 @@ define ['./Point'], (Point) ->
       @_lut ?= @generateLUT(20)
       px = point.x
       py = point.y
-      lastDist = 800
+      lastDist = Number.MAX_VALUE
 
       # 1. find position in LUT
       for tp, i in @_lut
