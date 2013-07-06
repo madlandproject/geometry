@@ -10,19 +10,24 @@ define ['./Point'], (Point) ->
       @end = end
 
     interpolatePoint: (t) ->
-      ptx  = @start.x * (1 - t) * (1 - t)
-      ptx += @ctrl.x * (1 - t) * t * 2
-      ptx += @end.x * t * t
+      it = (1 - t)
+      ts = t * t
 
-      pty  = @start.y * (1 - t) * (1 - t)
-      pty += @ctrl.y * (1 - t) * t * 2
-      pty += @end.y * t * t
+      ptx  = @start.x * it * it
+      ptx += @ctrl.x * it * t * 2
+      ptx += @end.x * ts
+
+      pty  = @start.y * it * it
+      pty += @ctrl.y * it * t * 2
+      pty += @end.y * ts
 
       new Point(ptx, pty)
 
     derive : (t) ->
-      dtx = 2 * (1-t) * (@ctrl.x - @start.x) + 2 * t * (@end.x - @ctrl.x)
-      dty = 2 * (1-t) * (@ctrl.y - @start.y) + 2 * t * (@end.y - @ctrl.y)
+      it = (1 - t)
+
+      dtx = 2 * it * (@ctrl.x - @start.x) + 2 * t * (@end.x - @ctrl.x)
+      dty = 2 * it * (@ctrl.y - @start.y) + 2 * t * (@end.y - @ctrl.y)
 
       new Point(dtx, dty)
 
@@ -41,7 +46,7 @@ define ['./Point'], (Point) ->
       new Point(newX, newY)
 
     generateLUT: (resolution) ->
-      @_lut = ( @interpolatePoint(t) for t in [0..1] by (1 / resolution))
+      lut = ( @interpolatePoint(t) for t in [0..1] by (1 / resolution))
 
     projectPoint: (point) ->
       @_lut ?= @generateLUT(20)

@@ -1,18 +1,10 @@
 define ['./Point'], (Point) ->
 
-  # precalc certain vars
+  # cached trig vars
   quarterCircle = -Math.PI / 2
 
   # basic functions
   _interpolateCubicBezier = (t, start, ctrl1, ctrl2, end) ->
-
-    # P0*(1-t)^3 + P1*3*t(1-t)^2 + 3*P2*t^2*(1-t) + P3*t^3
-    #
-    # pt  =    start * (1 - t) * (1- t) * (1 - t)
-    # pt +=    ctrl1 * 3       * t      * (1 - t) * (1 - t)
-    # pt +=    ctrl2 * 3       * t      *    t    * (1 - t)
-    # pt +=    end   *         * t      *    t
-    # #
 
     it = (1 - t)
     t2 = t * t
@@ -54,20 +46,12 @@ define ['./Point'], (Point) ->
     dt += 3 * (ctrl2 - ctrl1) * 2 * t * (1 - t)
     dt += 3 * (end   - ctrl2) * t * t
 
-  _deriveCubicBezier2 = (t, start, ctrl1, ctrl2, end) ->
-    # slightly different formula with slightly different results from : http://www.gamedev.net/topic/351308-cubic-bezier-curve-tangent/
-    dt  = -3    * start * (1 - t) * (1 - t)
-    dt += ctrl1 * (3 * (1 - t) * (1 - t) - 6 * (1 - t) * t )
-    dt += ctrl2 * (6 * (1 - t) * t - 3 * t * t)
-    dt += 3 * end * t * t
 
   _mapValueToRange = (value, inputStart, inputEnd, outputStart, outputEnd) ->
     # Y = (X-A)/(B-A) * (D-C) + C
     (value - inputStart) / (inputEnd - inputStart) * (outputEnd - outputStart) + outputStart
 
   # classes
-
-
   class CubicBezier
     constructor : (start, ctrl1, ctrl2, end) ->
       @start = start
