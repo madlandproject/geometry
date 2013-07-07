@@ -3,6 +3,9 @@ define ['./Point'], (Point) ->
   # cached trig vars
   quarterCircle = -Math.PI / 2
 
+
+  # TODO inline as class members
+
   # basic functions
   _interpolateCubicBezier = (t, start, ctrl1, ctrl2, end) ->
 
